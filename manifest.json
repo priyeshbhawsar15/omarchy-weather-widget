@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "id": "priyesh.weather-widget",
+  "name": "Weather Widget",
+  "version": "1.0.0",
+  "author": "Priyesh Bhawsar",
+  "license": "MIT",
+  "description": "Thermometer and hourly forecast weather card widget based on screenshot concept.",
+  "entryPoints": {
+    "service": "Service.qml",
+    "overlay": "HudOverlay.qml"
+  },
+  "kinds": ["service", "overlay"]
+}
