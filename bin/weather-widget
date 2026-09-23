@@ -19,7 +19,7 @@ DEFAULT_CONFIG = {
     "targetScreen": "DP-4",
     "position": "top-right",
     "width": 390,
-    "topMargin": 900,
+    "topMargin": 490,
     "rightMargin": 16,
     "unit": "celsius"
 }
