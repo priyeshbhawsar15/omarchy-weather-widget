@@ -12,7 +12,7 @@ Rectangle {
   readonly property bool autohideEnabled: pluginService ? pluginService.autohideEnabled : false
 
   readonly property color themeAccent: (Commons.Color.bar && Commons.Color.bar.active)
-    ? Commons.Color.bar.active : (Commons.Color.accent ? Commons.Color.accent : "#2dd4bf")
+    ? Commons.Color.bar.active : Commons.Color.accent
 
   readonly property int currentTemp: weatherData && weatherData.currentTemp !== undefined
     ? Number(weatherData.currentTemp) : 27

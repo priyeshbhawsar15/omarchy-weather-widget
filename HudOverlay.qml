@@ -10,7 +10,7 @@ PanelWindow {
   property string targetScreenName: "DP-4"
 
   readonly property color themeAccent: (Commons.Color.bar && Commons.Color.bar.active)
-    ? Commons.Color.bar.active : (Commons.Color.accent ? Commons.Color.accent : "#2dd4bf")
+    ? Commons.Color.bar.active : Commons.Color.accent
 
   readonly property bool isPinned: pluginService ? pluginService.isPinned : false
   readonly property bool autohideEnabled: pluginService ? pluginService.autohideEnabled : false
