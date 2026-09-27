@@ -5,7 +5,11 @@ import qs.Commons as Commons
 Rectangle {
   id: root
 
+  property var pluginService: null
   property var weatherData: null
+
+  readonly property bool isPinned: pluginService ? pluginService.isPinned : false
+  readonly property bool autohideEnabled: pluginService ? pluginService.autohideEnabled : false
 
   readonly property color themeAccent: (Commons.Color.bar && Commons.Color.bar.active)
     ? Commons.Color.bar.active : (Commons.Color.accent ? Commons.Color.accent : "#2dd4bf")
@@ -64,13 +68,82 @@ Rectangle {
       Layout.fillHeight: true
       spacing: Commons.Style.space(4)
 
-      // Large Temperature Readout
-      Text {
-        text: root.currentTemp + "°"
-        color: Commons.Color.foreground
-        font.family: Commons.Style.font.family
-        font.pixelSize: 34
-        font.weight: Font.Bold
+      // Header row: Large Temperature Readout + Auto-hide / Pin Controls
+      RowLayout {
+        Layout.fillWidth: true
+        spacing: Commons.Style.space(8)
+
+        Text {
+          text: root.currentTemp + "°"
+          color: Commons.Color.foreground
+          font.family: Commons.Style.font.family
+          font.pixelSize: 34
+          font.weight: Font.Bold
+        }
+
+        Item { Layout.fillWidth: true }
+
+        // AUTO-HIDE TOGGLE BUTTON
+        Rectangle {
+          width: 28
+          height: 28
+          radius: 6
+          color: root.autohideEnabled
+            ? Qt.rgba(root.themeAccent.r, root.themeAccent.g, root.themeAccent.b, 0.25)
+            : (autohideHover.containsMouse ? Qt.rgba(Commons.Color.foreground.r, Commons.Color.foreground.g, Commons.Color.foreground.b, 0.12) : "transparent")
+          border.width: 1
+          border.color: root.autohideEnabled
+            ? root.themeAccent : Qt.rgba(Commons.Color.foreground.r, Commons.Color.foreground.g, Commons.Color.foreground.b, 0.18)
+
+          Text {
+            anchors.centerIn: parent
+            text: root.autohideEnabled ? "󰘖" : "󱊒"
+            color: root.autohideEnabled ? root.themeAccent : Commons.Color.foreground
+            font.family: Commons.Style.font.family
+            font.pixelSize: 14
+          }
+
+          MouseArea {
+            id: autohideHover
+            anchors.fill: parent
+            hoverEnabled: true
+            cursorShape: Qt.PointingHandCursor
+            onClicked: {
+              if (root.pluginService) root.pluginService.toggleAutohide()
+            }
+          }
+        }
+
+        // PIN TOGGLE BUTTON
+        Rectangle {
+          width: 28
+          height: 28
+          radius: 6
+          color: root.isPinned
+            ? Qt.rgba(root.themeAccent.r, root.themeAccent.g, root.themeAccent.b, 0.25)
+            : (pinHover.containsMouse ? Qt.rgba(Commons.Color.foreground.r, Commons.Color.foreground.g, Commons.Color.foreground.b, 0.12) : "transparent")
+          border.width: 1
+          border.color: root.isPinned
+            ? root.themeAccent : Qt.rgba(Commons.Color.foreground.r, Commons.Color.foreground.g, Commons.Color.foreground.b, 0.18)
+
+          Text {
+            anchors.centerIn: parent
+            text: root.isPinned ? "󰐃" : "󰤱"
+            color: root.isPinned ? root.themeAccent : Commons.Color.foreground
+            font.family: Commons.Style.font.family
+            font.pixelSize: 14
+          }
+
+          MouseArea {
+            id: pinHover
+            anchors.fill: parent
+            hoverEnabled: true
+            cursorShape: Qt.PointingHandCursor
+            onClicked: {
+              if (root.pluginService) root.pluginService.togglePin()
+            }
+          }
+        }
       }
 
       // Location & Condition Subtitle
@@ -119,7 +192,7 @@ Rectangle {
 
             // Forecast Temp e.g. 29°
             Text {
-              text: (modelData.temp !== undefined ? modelData.temp : "--") + "°"
+              text: modelData.temp !== undefined ? (modelData.temp + "°") : "--"
               color: Commons.Color.foreground
               font.family: Commons.Style.font.family
               font.pixelSize: Commons.Style.font.caption
